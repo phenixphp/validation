@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use Phenix\Validation\Contracts\TypingRule;
-
 use function is_array;
+
+use Phenix\Validation\Contracts\TypingRule;
 
 class IsArray extends Rule implements TypingRule
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Rules\Min;
 use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Rules\IsCollection;
 use Phenix\Validation\Contracts\TypingRule;
+use Phenix\Validation\Rules\IsCollection;
+use Phenix\Validation\Rules\Min;
 
 class Collection extends ArrType
 {

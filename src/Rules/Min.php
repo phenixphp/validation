@@ -12,7 +12,8 @@ class Min extends Rule
 {
     protected float|int $limit;
 
-    public function __construct(float|int $limit) {
+    public function __construct(float|int $limit)
+    {
         $this->limit = abs($limit);
     }
 

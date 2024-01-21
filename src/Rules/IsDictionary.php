@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use function is_array;
 use function array_is_list;
-use Phenix\Validation\Contracts\TypingRule;
+use function is_array;
 
 class IsDictionary extends IsList
 {

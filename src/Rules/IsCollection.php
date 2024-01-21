@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use function is_array;
 use function array_is_list;
+use function is_array;
 
 class IsCollection extends IsList
 {
@@ -15,7 +15,7 @@ class IsCollection extends IsList
 
         return is_array($value)
             && array_is_list($value)
-            && !$this->isScalar($value);
+            && ! $this->isScalar($value);
     }
 
     public function message(): string

@@ -6,5 +6,4 @@ namespace Phenix\Validation\Contracts;
 
 interface RequirementRule
 {
-
 }

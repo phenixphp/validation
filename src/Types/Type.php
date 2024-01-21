@@ -7,10 +7,10 @@ namespace Phenix\Validation\Types;
 use Phenix\Validation\Contracts\RequirementRule;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type as TypeContract;
-use Phenix\Validation\Rules\Required;
 use Phenix\Validation\Contracts\TypingRule;
 use Phenix\Validation\Rules\Nullable;
 use Phenix\Validation\Rules\Optional;
+use Phenix\Validation\Rules\Required;
 
 abstract class Type implements TypeContract
 {

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Phenix\Validation\Rules;
 
 use function is_string;
+
 use Phenix\Validation\Contracts\TypingRule;
 
 class IsString extends Rule implements TypingRule
