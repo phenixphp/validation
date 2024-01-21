@@ -15,12 +15,14 @@
         }
     ],
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "adbario/php-dot-notation": "^3.3"
     },
     "require-dev": {
-        "pestphp/pest": "^2.15",
         "friendsofphp/php-cs-fixer": "^3.21.1",
-        "spatie/ray": "^1.28"
+        "pestphp/pest": "^2.15",
+        "spatie/ray": "^1.28",
+        "symfony/var-dumper": "^6.4"
     },
     "autoload": {
         "psr-4": {
@@ -34,8 +36,8 @@
     },
     "scripts": {
         "test": "vendor/bin/pest",
-            "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --allow-risky=yes"
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php --allow-risky=yes"
     },
     "config": {
         "sort-packages": true,
