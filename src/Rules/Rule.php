@@ -37,6 +37,6 @@ abstract class Rule implements RuleContract
 
     protected function getValue(): array|string|int|float|bool|null
     {
-        return $this->data[$this->field] ?? null;
+        return $this->data->get($this->field) ?? null;
     }
 }
