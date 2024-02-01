@@ -29,7 +29,7 @@ class Min extends Rule
 
     protected function getValue(): array|string|int|float|bool|null
     {
-        $value = $this->data[$this->field] ?? null;
+        $value = $this->data->get($this->field) ?? null;
 
         return match (gettype($value)) {
             'string' => strlen($value),
