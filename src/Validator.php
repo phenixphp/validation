@@ -123,13 +123,13 @@ class Validator
     {
         $count = count($data);
 
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $this->checkRules($rules, $data, $this->implodeKeys([$parent, $i]));
         }
     }
 
     private function implodeKeys(array $keys): string
     {
-        return implode('.', array_filter($keys, fn($key) => !is_null($key)));
+        return implode('.', array_filter($keys, fn ($key) => ! is_null($key)));
     }
 }
