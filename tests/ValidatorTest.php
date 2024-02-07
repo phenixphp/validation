@@ -40,7 +40,7 @@ it('runs data validation successfully with data dictionary', function () {
         'customer' => [
             'name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Spring street'
+            'address' => 'Spring street',
         ],
     ]);
 
