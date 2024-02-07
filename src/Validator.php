@@ -152,6 +152,6 @@ class Validator
 
     private function implodeKeys(array $keys): string
     {
-        return implode('.', array_filter($keys, fn($key) => !is_null($key)));
+        return implode('.', array_filter($keys, fn ($key) => ! is_null($key)));
     }
 }
