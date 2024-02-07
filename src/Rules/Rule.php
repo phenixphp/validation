@@ -7,6 +7,8 @@ namespace Phenix\Validation\Rules;
 use Adbar\Dot;
 use Phenix\Validation\Contracts\Rule as RuleContract;
 
+use function is_array;
+
 abstract class Rule implements RuleContract
 {
     protected string $field;
@@ -28,9 +30,9 @@ abstract class Rule implements RuleContract
         return $this;
     }
 
-    public function setData(array $data): self
+    public function setData(Dot|array $data): self
     {
-        $this->data = new Dot($data);
+        $this->data = is_array($data) ? new Dot($data) : $data;
 
         return $this;
     }

@@ -17,9 +17,13 @@ it('runs data scalar validation successfully', function () {
     ]);
     $validator->setData([
         'name' => 'John',
+        'last_name' => 'Doe',
     ]);
 
     expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe([
+        'name' => 'John',
+    ]);
 });
 
 it('runs data validation successfully with data dictionary', function () {
@@ -36,10 +40,17 @@ it('runs data validation successfully with data dictionary', function () {
         'customer' => [
             'name' => 'John',
             'last_name' => 'Doe',
+            'address' => 'Spring street'
         ],
     ]);
 
     expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe([
+        'customer' => [
+            'name' => 'John',
+            'last_name' => 'Doe',
+        ],
+    ]);
 });
 
 it('runs data validation successfully with data collection', function () {
@@ -55,14 +66,26 @@ it('runs data validation successfully with data collection', function () {
         'customer' => [
             [
                 'name' => 'John',
+                'last_name' => 'Doe',
+            ],
+            [
+                'name' => 'Bob',
+                'last_name' => 'Ross',
+            ],
+        ],
+    ]);
+
+    expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe([
+        'customer' => [
+            [
+                'name' => 'John',
             ],
             [
                 'name' => 'Bob',
             ],
         ],
     ]);
-
-    expect($validator->passes())->toBeTrue();
 });
 
 it('runs data validation successfully with data list', function () {
@@ -74,7 +97,11 @@ it('runs data validation successfully with data list', function () {
 
     $validator->setData([
         'weekdays' => ['monday', 'sunday'],
+        'months' => ['january'],
     ]);
 
     expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe([
+        'weekdays' => ['monday', 'sunday'],
+    ]);
 });

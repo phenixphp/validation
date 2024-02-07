@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace Phenix\Validation;
 
+use Adbar\Dot;
 use ArrayIterator;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type;
 use Phenix\Validation\Types\ArrType;
 use Phenix\Validation\Types\Collection;
+use Phenix\Validation\Types\Dictionary;
+
+use function is_null;
+use function in_array;
+use function array_unique;
+use function array_filter;
 
 class Validator
 {
-    protected array $data;
+    protected Dot $data;
     protected ArrayIterator $rules;
     protected bool $stopOnFail = false;
     protected array $failing = [];
@@ -28,7 +35,7 @@ class Validator
 
     public function setData(array $data = []): self
     {
-        $this->data = $data;
+        $this->data = new Dot($data);
 
         return $this;
     }
@@ -37,7 +44,7 @@ class Validator
     {
         $this->reset();
 
-        $this->checkRules($this->rules, $this->data);
+        $this->checkRules($this->rules);
 
         return $this->validated;
 
@@ -67,7 +74,20 @@ class Validator
 
     public function validated(): array
     {
-        return array_unique($this->validated);
+        $validated = new Dot();
+        $keys = array_unique($this->validated);
+
+        foreach ($keys as $key) {
+            $rule = $this->rules[$key] ?? null;
+
+            if ($rule && in_array($rule::class, [Collection::class, Dictionary::class])) {
+                $validated->set($key, []);
+            } else {
+                $validated->set($key, $this->data->get($key));
+            }
+        }
+
+        return $validated->all();
     }
 
     private function reset(): void
@@ -77,7 +97,7 @@ class Validator
         $this->rules->rewind();
     }
 
-    private function checkRules(ArrayIterator $rules, array $data, string|int|null $parent = null): void
+    private function checkRules(ArrayIterator $rules, string|int|null $parent = null): void
     {
         while ($rules->valid() && ! $this->shouldStop()) {
             $field = $rules->key();
@@ -88,16 +108,16 @@ class Validator
             $ruleSet = $type->toArray();
 
             foreach ($ruleSet['type'] as $rule) {
-                $this->checkRule($field, $rule, $data, $parent);
+                $this->checkRule($field, $rule, $parent);
             }
 
             if ($type instanceof ArrType) {
                 $defRules = new ArrayIterator($ruleSet['definition'] ?? []);
 
                 if ($type instanceof Collection) {
-                    $this->checkCollection($defRules, $data ?? [], $this->implodeKeys([$parent, $field]));
+                    $this->checkCollection($defRules, $this->implodeKeys([$parent, $field]));
                 } else {
-                    $this->checkRules($defRules, $data, $this->implodeKeys([$parent, $field]));
+                    $this->checkRules($defRules, $this->implodeKeys([$parent, $field]));
                 }
             }
 
@@ -105,12 +125,12 @@ class Validator
         }
     }
 
-    private function checkRule(string $field, Rule $rule, array $data, string|int|null $parent = null): void
+    private function checkRule(string $field, Rule $rule, string|int|null $parent = null): void
     {
         $field = $this->implodeKeys([$parent, $field]);
 
         $rule->setField($field)
-            ->setData($data);
+            ->setData($this->data);
 
         if (! $rule->passes()) {
             $this->failing[$field] = $rule::class;
@@ -119,12 +139,14 @@ class Validator
         $this->validated[] = $field;
     }
 
-    private function checkCollection(ArrayIterator $rules, array $data, string|int|null $parent = null): void
+    private function checkCollection(ArrayIterator $rules, string|int|null $parent = null): void
     {
-        $count = count($data);
+        $count = is_null($parent) ? count($this->data) : count($this->data[$parent]);
 
         for ($i=0; $i < $count; $i++) {
-            $this->checkRules($rules, $data, $this->implodeKeys([$parent, $i]));
+            $this->checkRules($rules, $this->implodeKeys([$parent, $i]));
+
+            $rules->rewind();
         }
     }
 
