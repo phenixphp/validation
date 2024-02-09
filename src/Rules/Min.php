@@ -27,7 +27,7 @@ class Min extends Rule
         return "The {$this->field} field must be string type.";
     }
 
-    protected function getValue(): array|string|int|float|bool|null
+    protected function getValue(): int
     {
         $value = $this->data->get($this->field) ?? null;
 
