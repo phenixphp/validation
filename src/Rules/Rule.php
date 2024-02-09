@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Phenix\Validation\Rules;
 
 use Adbar\Dot;
+use Phenix\Validation\Contracts\Rule as RuleContract;
 
 use function is_array;
-
-use Phenix\Validation\Contracts\Rule as RuleContract;
 
 abstract class Rule implements RuleContract
 {
     protected string $field;
     protected Dot $data;
+
+    public function __construct(array|null $data = null)
+    {
+        $this->setData($data ?? []);
+    }
 
     public static function new(mixed ...$args): static
     {
