@@ -78,20 +78,17 @@ class Validator
 
     public function validated(): array
     {
-        $validated = new Dot();
-        $keys = array_unique($this->validated);
+        return $this->getDataFromKeys(array_unique($this->validated));
+    }
 
-        foreach ($keys as $key) {
-            $rule = $this->rules[$key] ?? null;
+    public function failing(): array
+    {
+        return $this->failing;
+    }
 
-            if ($rule && in_array($rule::class, [Collection::class, Dictionary::class])) {
-                $validated->set($key, []);
-            } else {
-                $validated->set($key, $this->data->get($key));
-            }
-        }
-
-        return $validated->all();
+    public function invalid(): array
+    {
+        return $this->getDataFromKeys(array_keys($this->failing));
     }
 
     private function reset(): void
@@ -137,7 +134,7 @@ class Validator
             ->setData($this->data);
 
         if (! $rule->passes()) {
-            $this->failing[$field] = $rule::class;
+            $this->failing[$field][] = $rule::class;
         }
 
         $this->validated[] = $field;
@@ -157,5 +154,22 @@ class Validator
     private function implodeKeys(array $keys): string
     {
         return implode('.', array_filter($keys, fn ($key) => ! is_null($key)));
+    }
+
+    private function getDataFromKeys(array $keys)
+    {
+        $validated = new Dot();
+
+        foreach ($keys as $key) {
+            $rule = $this->rules[$key] ?? null;
+
+            if ($rule && in_array($rule::class, [Collection::class, Dictionary::class])) {
+                $validated->set($key, []);
+            } else {
+                $validated->set($key, $this->data->get($key));
+            }
+        }
+
+        return $validated->all();
     }
 }

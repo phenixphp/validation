@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
 use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
+use Phenix\Validation\Rules\IsDictionary;
+use Phenix\Validation\Rules\IsString;
+use Phenix\Validation\Rules\Min;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
 use Phenix\Validation\Types\Str;
 use Phenix\Validation\Validator;
 
-it('runs data scalar validation successfully', function () {
+it('runs data scalar successfully validation', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -27,7 +30,7 @@ it('runs data scalar validation successfully', function () {
     ]);
 });
 
-it('runs data validation successfully with data dictionary', function () {
+it('runs data successfully validation with data dictionary', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -68,7 +71,46 @@ it('throws error on an invalid dictionary definition', function (array $definiti
     'dictionary without scalar type' => [['key' => ArrList::required()]],
 ]);
 
-it('runs data validation successfully with data collection', function () {
+it('runs data failed validation with data dictionary', function () {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'customer' => Dictionary::required()->min(2)->define([
+            'name' => Str::required()->min(3),
+            'email' => Str::required()->min(12),
+        ]),
+    ]);
+
+    $validator->setData([
+        'customer' => [
+            'name' => 'John',
+            'last_name' => 'Doe',
+            'email' => ['john.doe@mail.com'],
+        ],
+    ]);
+
+    expect($validator->passes())->toBeFalsy();
+
+    expect($validator->validated())->toBe([
+        'customer' => [
+            'name' => 'John',
+            'email' => ['john.doe@mail.com'],
+        ],
+    ]);
+
+    expect($validator->failing())->toBe([
+        'customer' => [IsDictionary::class],
+        'customer.email' => [IsString::class, Min::class],
+    ]);
+
+    expect($validator->invalid())->toBe([
+        'customer' => [
+            'email' => ['john.doe@mail.com'],
+        ],
+    ]);
+});
+
+it('runs data successfully validation with data collection', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -116,7 +158,7 @@ it('throws error on an invalid collection definition', function (array $definiti
     'dictionary without rules' => [['key' => 'value']],
 ]);
 
-it('runs data validation successfully with data list', function () {
+it('runs data successfully validation with data list', function () {
     $validator = new Validator();
 
     $validator->setRules([
