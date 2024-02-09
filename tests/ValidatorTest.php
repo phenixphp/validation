@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
 use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
-use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
@@ -121,7 +120,7 @@ it('runs data validation successfully with data list', function () {
     $validator = new Validator();
 
     $validator->setRules([
-        'weekdays' => ArrList::required()->define(IsString::new()),
+        'weekdays' => ArrList::required()->define(Str::required()),
     ]);
 
     $validator->setData([

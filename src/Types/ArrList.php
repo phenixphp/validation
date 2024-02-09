@@ -9,9 +9,8 @@ use Phenix\Validation\Rules\TypeRule;
 
 class ArrList extends ArrType
 {
-    public function define(TypeRule $definition): self
+    public function define(Scalar $definition): self
     {
-        // TODO: Every
         $this->definition = $definition;
 
         return $this;
