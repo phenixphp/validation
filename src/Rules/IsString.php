@@ -12,9 +12,4 @@ class IsString extends TypeRule
     {
         return is_string($this->getValue());
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field must be string type.";
-    }
 }

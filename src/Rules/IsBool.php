@@ -10,9 +10,4 @@ class IsBool extends TypeRule
     {
         return is_bool($this->getValue());
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field must be string type.";
-    }
 }

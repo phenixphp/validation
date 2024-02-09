@@ -22,9 +22,4 @@ class Required extends Rule implements RequirementRule
             || (is_string($value) && ! empty(trim($value)))
             || (is_countable($value) && count($value) > 0);
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field is required.";
-    }
 }

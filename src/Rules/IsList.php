@@ -18,11 +18,6 @@ class IsList extends TypeRule
             && $this->isScalar($value);
     }
 
-    public function message(): string
-    {
-        return "The {$this->field} field must be list type.";
-    }
-
     protected function isScalar(array $data): bool
     {
         foreach ($data as $item) {

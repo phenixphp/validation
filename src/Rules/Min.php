@@ -22,11 +22,6 @@ class Min extends Rule
         return $this->getValue() >= $this->limit;
     }
 
-    public function message(): string
-    {
-        return "The {$this->field} field must be string type.";
-    }
-
     protected function getValue(): int
     {
         $value = $this->data->get($this->field) ?? null;

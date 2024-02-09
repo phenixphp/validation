@@ -26,8 +26,6 @@ abstract class Rule implements RuleContract
 
     abstract public function passes(): bool;
 
-    abstract public function message(): string;
-
     public function setField(string $field): self
     {
         $this->field = $field;

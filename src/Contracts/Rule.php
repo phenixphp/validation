@@ -13,6 +13,4 @@ interface Rule
     public function setData(Dot|array $data): self;
 
     public function passes(): bool;
-
-    public function message(): string;
 }

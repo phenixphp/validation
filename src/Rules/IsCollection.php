@@ -17,9 +17,4 @@ class IsCollection extends IsList
             && array_is_list($value)
             && ! $this->isScalar($value);
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field must be collection type.";
-    }
 }

@@ -12,9 +12,4 @@ class Nullable extends Rule implements RequirementRule
     {
         return true;
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field must be filled.";
-    }
 }

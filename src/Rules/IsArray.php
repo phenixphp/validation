@@ -12,9 +12,4 @@ class IsArray extends TypeRule
     {
         return is_array($this->getValue());
     }
-
-    public function message(): string
-    {
-        return "The {$this->field} field must be array type.";
-    }
 }
