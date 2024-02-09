@@ -10,12 +10,6 @@ class Nullable extends Rule implements RequirementRule
 {
     public function passes(): bool
     {
-        $value = $this->getValue();
-
-        if (! empty($value)) {
-            return parent::passes($value);
-        }
-
         return true;
     }
 
