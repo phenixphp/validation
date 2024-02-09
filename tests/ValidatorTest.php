@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
+use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
@@ -40,7 +42,7 @@ it('runs data validation successfully with data dictionary', function () {
         'customer' => [
             'name' => 'John',
             'last_name' => 'Doe',
-            'address' => 'Spring street'
+            'address' => 'Spring street',
         ],
     ]);
 
@@ -52,6 +54,20 @@ it('runs data validation successfully with data dictionary', function () {
         ],
     ]);
 });
+
+it('throws error on an invalid dictionary definition', function (array $definition) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'customer' => Dictionary::required()->min(2)->define($definition),
+    ]);
+})
+->throws(InvalidDictionaryDefinition::class)
+->with([
+    'list' => [['value']],
+    'dictionary without rules' => [['key' => 'value']],
+    'dictionary without scalar type' => [['key' => ArrList::required()]],
+]);
 
 it('runs data validation successfully with data collection', function () {
     $validator = new Validator();
@@ -87,6 +103,19 @@ it('runs data validation successfully with data collection', function () {
         ],
     ]);
 });
+
+it('throws error on an invalid collection definition', function (array $definition) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'customer' => Collection::required()->min(2)->define($definition),
+    ]);
+})
+->throws(InvalidCollectionDefinition::class)
+->with([
+    'list' => [['value']],
+    'dictionary without rules' => [['key' => 'value']],
+]);
 
 it('runs data validation successfully with data list', function () {
     $validator = new Validator();

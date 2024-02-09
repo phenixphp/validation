@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Contracts\TypingRule;
 use Phenix\Validation\Rules\IsArray;
+use Phenix\Validation\Rules\TypeRule;
 
 class Arr extends ArrType
 {
@@ -17,7 +16,7 @@ class Arr extends ArrType
         return $this;
     }
 
-    protected function defineType(): Rule&TypingRule
+    protected function defineType(): TypeRule
     {
         return IsArray::new();
     }

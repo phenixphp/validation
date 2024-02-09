@@ -7,14 +7,14 @@ namespace Phenix\Validation\Types;
 use Phenix\Validation\Contracts\RequirementRule;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type as TypeContract;
-use Phenix\Validation\Contracts\TypingRule;
 use Phenix\Validation\Rules\Nullable;
 use Phenix\Validation\Rules\Optional;
 use Phenix\Validation\Rules\Required;
+use Phenix\Validation\Rules\TypeRule;
 
 abstract class Type implements TypeContract
 {
-    protected Rule&TypingRule $type;
+    protected TypeRule $type;
     protected array $rules;
 
     public function __construct(
@@ -24,7 +24,7 @@ abstract class Type implements TypeContract
         $this->rules = [];
     }
 
-    abstract protected function defineType(): Rule&TypingRule;
+    abstract protected function defineType(): TypeRule;
 
     public static function required(): static
     {

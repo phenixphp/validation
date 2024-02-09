@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Contracts\TypingRule;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\TypeRule;
 
-class Str extends Type
+class Str extends Scalar
 {
-    protected function defineType(): Rule&TypingRule
+    protected function defineType(): TypeRule
     {
         return IsString::new();
     }

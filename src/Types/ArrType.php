@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Contracts\TypingRule;
+use Phenix\Validation\Rules\TypeRule;
 
 abstract class ArrType extends Type
 {
-    protected (Rule&TypingRule)|array $definition;
+    protected TypeRule|array $definition;
 
     public function toArray(): array
     {

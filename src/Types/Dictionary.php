@@ -4,16 +4,19 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Contracts\TypingRule;
+use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
 use Phenix\Validation\Rules\IsDictionary;
 use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\TypeRule;
 
 class Dictionary extends ArrType
 {
     public function define(array $definition): self
     {
-        // TODO: Every
+        if (array_is_list($definition) || ! $this->isValidDefinition($definition)) {
+            $this->throwsError();
+        }
+
         $this->definition = $definition;
 
         return $this;
@@ -31,8 +34,24 @@ class Dictionary extends ArrType
         return $this;
     }
 
-    protected function defineType(): Rule&TypingRule
+    protected function defineType(): TypeRule
     {
         return IsDictionary::new();
+    }
+
+    protected function throwsError(): never
+    {
+        throw new InvalidDictionaryDefinition('The dictionary definition is invalid.');
+    }
+
+    protected function isValidDefinition(array $definition): bool
+    {
+        foreach ($definition as $key => $value) {
+            if (! is_string($key) || ! $value instanceof Scalar) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

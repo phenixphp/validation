@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\Rule;
-use Phenix\Validation\Contracts\TypingRule;
 use Phenix\Validation\Rules\IsList;
+use Phenix\Validation\Rules\TypeRule;
 
 class ArrList extends ArrType
 {
-    public function define(Rule&TypingRule $definition): self
+    public function define(TypeRule $definition): self
     {
         // TODO: Every
         $this->definition = $definition;
@@ -18,7 +17,7 @@ class ArrList extends ArrType
         return $this;
     }
 
-    protected function defineType(): Rule&TypingRule
+    protected function defineType(): TypeRule
     {
         return IsList::new();
     }

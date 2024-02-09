@@ -5,17 +5,21 @@ declare(strict_types=1);
 namespace Phenix\Validation;
 
 use Adbar\Dot;
+
+use function array_filter;
+use function array_unique;
+
 use ArrayIterator;
+
+use function in_array;
+use function is_null;
+
 use Phenix\Validation\Contracts\Rule;
+
 use Phenix\Validation\Contracts\Type;
 use Phenix\Validation\Types\ArrType;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
-
-use function is_null;
-use function in_array;
-use function array_unique;
-use function array_filter;
 
 class Validator
 {
@@ -143,7 +147,7 @@ class Validator
     {
         $count = is_null($parent) ? count($this->data) : count($this->data[$parent]);
 
-        for ($i=0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $this->checkRules($rules, $this->implodeKeys([$parent, $i]));
 
             $rules->rewind();

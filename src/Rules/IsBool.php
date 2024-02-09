@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use Phenix\Validation\Contracts\TypingRule;
-
-class IsBool extends Rule implements TypingRule
+class IsBool extends TypeRule
 {
     public function passes(): bool
     {

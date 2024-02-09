@@ -6,9 +6,7 @@ namespace Phenix\Validation\Rules;
 
 use function is_array;
 
-use Phenix\Validation\Contracts\TypingRule;
-
-class IsArray extends Rule implements TypingRule
+class IsArray extends TypeRule
 {
     public function passes(): bool
     {
