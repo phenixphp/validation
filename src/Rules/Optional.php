@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use function count;
+use Phenix\Validation\Contracts\RequirementRule;
 
+use function count;
 use function is_countable;
 use function is_null;
 use function is_string;
-
-use Phenix\Validation\Contracts\RequirementRule;
-
 use function trim;
 
 class Optional extends Rule implements RequirementRule

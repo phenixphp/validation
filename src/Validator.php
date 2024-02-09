@@ -5,21 +5,17 @@ declare(strict_types=1);
 namespace Phenix\Validation;
 
 use Adbar\Dot;
-
-use function array_filter;
-use function array_unique;
-
 use ArrayIterator;
-
-use function in_array;
-use function is_null;
-
 use Phenix\Validation\Contracts\Rule;
-
 use Phenix\Validation\Contracts\Type;
 use Phenix\Validation\Types\ArrType;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
+
+use function array_filter;
+use function array_unique;
+use function in_array;
+use function is_null;
 
 class Validator
 {
