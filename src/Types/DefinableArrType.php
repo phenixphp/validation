@@ -8,7 +8,7 @@ use Phenix\Validation\Util\Arr;
 
 abstract class DefinableArrType extends ArrType
 {
-    public function define(array $definition): self
+    public function define(array $definition): static
     {
         if (! $this->isValidDefinition($definition)) {
             $this->throwsDefinitionError();

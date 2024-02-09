@@ -10,14 +10,14 @@ abstract class ArrType extends Type
 {
     protected Scalar|array $definition;
 
-    public function min(int $limit): self
+    public function min(int $limit): static
     {
         $this->rules[] = Min::new($limit);
 
         return $this;
     }
 
-    public function max(int $limit): self
+    public function max(int $limit): static
     {
         return $this;
     }
