@@ -20,7 +20,8 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.21.1",
-        "pestphp/pest": "^2.15",
+        "pestphp/pest": "^2.33",
+        "phpstan/phpstan": "^1.10",
         "spatie/ray": "^1.28",
         "symfony/var-dumper": "^6.4"
     },
