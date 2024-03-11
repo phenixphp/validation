@@ -104,8 +104,14 @@ class Validator
 
             $ruleSet = $type->toArray();
 
+            $passes = true;
+
             foreach ($ruleSet['type'] as $rule) {
-                $this->checkRule($field, $rule, $parent);
+                $passes = $this->checkRule($field, $rule, $parent);
+
+                if (! $passes) {
+                    break;
+                }
             }
 
             if ($type instanceof ArrType) {
@@ -122,18 +128,22 @@ class Validator
         }
     }
 
-    private function checkRule(string $field, Rule $rule, string|int|null $parent = null): void
+    private function checkRule(string $field, Rule $rule, string|int|null $parent = null): bool
     {
         $field = $this->implodeKeys([$parent, $field]);
 
         $rule->setField($field)
             ->setData($this->data);
 
-        if (! $rule->passes()) {
+        $passes = $rule->passes();
+
+        if (! $passes) {
             $this->failing[$field][] = $rule::class;
         }
 
         $this->validated[] = $field;
+
+        return $passes;
     }
 
     private function checkCollection(ArrayIterator $rules, string|int|null $parent = null): void

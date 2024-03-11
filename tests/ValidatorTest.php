@@ -6,14 +6,14 @@ use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
 use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
 use Phenix\Validation\Rules\IsDictionary;
 use Phenix\Validation\Rules\IsString;
-use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\Required;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
 use Phenix\Validation\Types\Str;
 use Phenix\Validation\Validator;
 
-it('runs data scalar successfully validation', function () {
+it('runs successfully validation with scalar data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -27,6 +27,30 @@ it('runs data scalar successfully validation', function () {
     expect($validator->passes())->toBeTrue();
     expect($validator->validated())->toBe([
         'name' => 'John',
+    ]);
+});
+
+it('runs failed validation with scalar data', function () {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'name' => Str::required(),
+    ]);
+    $validator->setData([
+        'last_name' => 'Doe',
+    ]);
+
+    expect($validator->passes())->toBeFalse();
+    expect($validator->validated())->toBe([
+        'name' => null,
+    ]);
+
+    expect($validator->failing())->toBe([
+        'name' => [Required::class],
+    ]);
+
+    expect($validator->invalid())->toBe([
+        'name' => null,
     ]);
 });
 
@@ -100,7 +124,7 @@ it('runs data failed validation with data dictionary', function () {
 
     expect($validator->failing())->toBe([
         'customer' => [IsDictionary::class],
-        'customer.email' => [IsString::class, Min::class],
+        'customer.email' => [IsString::class],
     ]);
 
     expect($validator->invalid())->toBe([
