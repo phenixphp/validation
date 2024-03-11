@@ -7,6 +7,7 @@ use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
 use Phenix\Validation\Rules\IsDictionary;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Rules\Required;
+use Phenix\Validation\Types\Arr;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
@@ -277,5 +278,37 @@ it('stops validating all types when one of them fails', function () {
 
     expect($validator->invalid())->toBe([
         'date' => null,
+    ]);
+});
+
+it('runs data successfully validation with data array', function () {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'customer' => Arr::required()->min(2)->define([
+            'full_name' => Str::required()->min(8),
+            'links' => ArrList::required()->min(2)->define(Str::required()),
+        ]),
+    ]);
+
+    $validator->setData([
+        'customer' => [
+            'full_name' => 'John Doe',
+            'links' => [
+                'https://twitter.com/@Jhon.Doe',
+                'https://facebook.com/@Jhon.Doe',
+            ],
+        ],
+    ]);
+
+    expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe([
+        'customer' => [
+            'full_name' => 'John Doe',
+            'links' => [
+                'https://twitter.com/@Jhon.Doe',
+                'https://facebook.com/@Jhon.Doe',
+            ],
+        ],
     ]);
 });
