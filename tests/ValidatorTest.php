@@ -199,3 +199,83 @@ it('runs data successfully validation with data list', function () {
         'weekdays' => ['monday', 'sunday'],
     ]);
 });
+
+it('does not stop validating all types when one of them fails', function () {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'customer' => Dictionary::required()->min(2)->define([
+            'name' => Str::required()->min(3),
+            'email' => Str::required()->min(12),
+        ]),
+        'date' => Str::required()->min(10),
+        'merchant' => Str::required()->min(3),
+    ]);
+
+    $validator->setData([
+        'customer' => [
+            'name' => 'John Doe',
+            'email' => 'john.doe@mail.com',
+        ],
+        'merchant' => 'My merchant',
+    ]);
+
+    expect($validator->passes())->toBeFalsy();
+
+    expect($validator->validated())->toBe([
+        'customer' => [
+            'name' => 'John Doe',
+            'email' => 'john.doe@mail.com',
+        ],
+        'date' => null,
+        'merchant' => 'My merchant',
+    ]);
+
+    expect($validator->failing())->toBe([
+        'date' => [Required::class],
+    ]);
+
+    expect($validator->invalid())->toBe([
+        'date' => null,
+    ]);
+});
+
+it('stops validating all types when one of them fails', function () {
+    $validator = new Validator();
+    $validator->stopOnFailure();
+
+    $validator->setRules([
+        'customer' => Dictionary::required()->min(2)->define([
+            'name' => Str::required()->min(3),
+            'email' => Str::required()->min(12),
+        ]),
+        'date' => Str::required()->min(10),
+        'merchant' => Str::required()->min(3),
+    ]);
+
+    $validator->setData([
+        'customer' => [
+            'name' => 'John Doe',
+            'email' => 'john.doe@mail.com',
+        ],
+        'merchant' => 'My merchant',
+    ]);
+
+    expect($validator->passes())->toBeFalsy();
+
+    expect($validator->validated())->toBe([
+        'customer' => [
+            'name' => 'John Doe',
+            'email' => 'john.doe@mail.com',
+        ],
+        'date' => null,
+    ]);
+
+    expect($validator->failing())->toBe([
+        'date' => [Required::class],
+    ]);
+
+    expect($validator->invalid())->toBe([
+        'date' => null,
+    ]);
+});

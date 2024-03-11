@@ -46,8 +46,6 @@ class Validator
 
         $this->checkRules($this->rules);
 
-        return $this->validated;
-
         // foreach ($this->after as $after) {
         //     $after();
         // }
@@ -67,9 +65,11 @@ class Validator
         return ! $this->passes();
     }
 
-    public function shouldStop(): bool
+    public function stopOnFailure(): self
     {
-        return $this->stopOnFail && $this->fails();
+        $this->stopOnFail = true;
+
+        return $this;
     }
 
     public function validated(): array
@@ -85,6 +85,11 @@ class Validator
     public function invalid(): array
     {
         return $this->getDataFromKeys(array_keys($this->failing));
+    }
+
+    private function shouldStop(): bool
+    {
+        return $this->stopOnFail && ! empty($this->failing);
     }
 
     private function reset(): void
