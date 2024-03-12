@@ -55,7 +55,7 @@ it('runs failed validation with scalar data', function () {
     ]);
 });
 
-it('runs data successfully validation with data dictionary', function () {
+it('runs data successfully validation with dictionary data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -96,7 +96,7 @@ it('throws error on an invalid dictionary definition', function (array $definiti
     'dictionary without scalar type' => [['key' => ArrList::required()]],
 ]);
 
-it('runs data failed validation with data dictionary', function () {
+it('runs data failed validation with dictionary data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -135,7 +135,7 @@ it('runs data failed validation with data dictionary', function () {
     ]);
 });
 
-it('runs data successfully validation with data collection', function () {
+it('runs data successfully validation with collection data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -183,7 +183,7 @@ it('throws error on an invalid collection definition', function (array $definiti
     'dictionary without rules' => [['key' => 'value']],
 ]);
 
-it('runs data successfully validation with data list', function () {
+it('runs data successfully validation with list data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -281,7 +281,7 @@ it('stops validating all types when one of them fails', function () {
     ]);
 });
 
-it('runs data successfully validation with data array', function () {
+it('runs data successfully validation with array data', function () {
     $validator = new Validator();
 
     $validator->setRules([
