@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Contracts\RequirementRule;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type as TypeContract;
 use Phenix\Validation\Rules\Nullable;
 use Phenix\Validation\Rules\Optional;
 use Phenix\Validation\Rules\Required;
+use Phenix\Validation\Rules\Requirement;
 use Phenix\Validation\Rules\TypeRule;
 
 abstract class Type implements TypeContract
@@ -18,7 +18,7 @@ abstract class Type implements TypeContract
     protected array $rules;
 
     public function __construct(
-        protected Rule&RequirementRule $requirement,
+        protected Requirement $requirement,
     ) {
         $this->type = $this->defineType();
         $this->rules = [];
@@ -39,6 +39,11 @@ abstract class Type implements TypeContract
     public static function nullable(): static
     {
         return new static(Nullable::new());
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->requirement instanceof Required;
     }
 
     /**

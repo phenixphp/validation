@@ -4,12 +4,25 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use Phenix\Validation\Contracts\RequirementRule;
+use function is_null;
 
-class Nullable extends Rule implements RequirementRule
+class Nullable extends Required
 {
     public function passes(): bool
     {
-        return true;
+        if (! $this->data->has($this->field)) {
+            return false;
+        }
+
+        if (is_null($this->getValue())) {
+            return true;
+        }
+
+        return parent::passes();
+    }
+
+    public function skip(): bool
+    {
+        return is_null($this->getValue());
     }
 }

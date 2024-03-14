@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Phenix\Validation\Types\Boolean;
 
-
 it('runs validation with required boolean data', function (array $data, bool $expected) {
     $rules = Boolean::required()->toArray();
 

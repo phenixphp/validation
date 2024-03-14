@@ -6,4 +6,5 @@ namespace Phenix\Validation\Contracts;
 
 interface Type extends Arrayable
 {
+    public function isRequired(): bool;
 }

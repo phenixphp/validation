@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Rules;
 
-use Phenix\Validation\Contracts\RequirementRule;
-
-use function count;
-use function is_countable;
-use function is_null;
-use function is_string;
-use function trim;
-
-class Optional extends Rule implements RequirementRule
+class Optional extends Required
 {
     public function passes(): bool
     {
-        $value = $this->getValue();
+        if (! $this->data->has($this->field)) {
+            return true;
+        }
 
-        return ! is_null($value)
-            || (is_string($value) && ! empty(trim($value)))
-            || (is_countable($value) && count($value) > 0);
+        return parent::passes();
+    }
+
+    public function skip(): bool
+    {
+        return ! $this->data->has($this->field);
     }
 }

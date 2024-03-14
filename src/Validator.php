@@ -6,8 +6,10 @@ namespace Phenix\Validation;
 
 use Adbar\Dot;
 use ArrayIterator;
+use Phenix\Validation\Contracts\Arrayable;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type;
+use Phenix\Validation\Rules\Requirement;
 use Phenix\Validation\Types\ArrType;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
@@ -113,23 +115,31 @@ class Validator
 
             foreach ($ruleSet['type'] as $rule) {
                 $passes = $this->checkRule($field, $rule, $parent);
+                $skip = $rule instanceof Requirement ? $rule->skip() : false;
 
-                if (! $passes) {
+                if (! $passes || $skip) {
                     break;
                 }
             }
 
-            if ($type instanceof ArrType) {
-                $defRules = new ArrayIterator($ruleSet['definition'] ?? []);
-
-                if ($type instanceof Collection) {
-                    $this->checkCollection($defRules, $this->implodeKeys([$parent, $field]));
-                } else {
-                    $this->checkRules($defRules, $this->implodeKeys([$parent, $field]));
-                }
+            if (isset($ruleSet['definition'])) {
+                $this->checkDefinition($field, $type, $ruleSet['definition'], $parent);
             }
 
             $rules->next();
+        }
+    }
+
+    private function checkDefinition(string $field, Type $type, Arrayable|array $rules, string|int|null $parent = null)
+    {
+        if (isset($rules)) {
+            $rules = new ArrayIterator($rules);
+
+            if ($type instanceof Collection) {
+                $this->checkCollection($rules, $this->implodeKeys([$parent, $field]));
+            } else {
+                $this->checkRules($rules, $this->implodeKeys([$parent, $field]));
+            }
         }
     }
 
@@ -172,12 +182,15 @@ class Validator
         $validated = new Dot();
 
         foreach ($keys as $key) {
-            $rule = $this->rules[$key] ?? null;
+            /** @var Type $type */
+            $type = $this->rules[$key] ?? null;
 
-            if ($rule && in_array($rule::class, [Collection::class, Dictionary::class])) {
+            if ($type && in_array($type::class, [Collection::class, Dictionary::class])) {
                 $validated->set($key, []);
-            } else {
+            } elseif ($this->data->has($key)) {
                 $validated->set($key, $this->data->get($key));
+            } elseif (! $this->data->has($key) && $type->isRequired()) {
+                $validated->set($key, null);
             }
         }
 

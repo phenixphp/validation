@@ -55,7 +55,7 @@ it('runs failed validation with scalar data', function () {
     ]);
 });
 
-it('runs data successfully validation with dictionary data', function () {
+it('runs successfully validation with dictionary data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -135,7 +135,7 @@ it('runs data failed validation with dictionary data', function () {
     ]);
 });
 
-it('runs data successfully validation with collection data', function () {
+it('runs successfully validation with collection data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -183,7 +183,7 @@ it('throws error on an invalid collection definition', function (array $definiti
     'dictionary without rules' => [['key' => 'value']],
 ]);
 
-it('runs data successfully validation with list data', function () {
+it('runs successfully validation with list data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -222,7 +222,6 @@ it('does not stop validating all types when one of them fails', function () {
     ]);
 
     expect($validator->passes())->toBeFalsy();
-
     expect($validator->validated())->toBe([
         'customer' => [
             'name' => 'John Doe',
@@ -262,8 +261,7 @@ it('stops validating all types when one of them fails', function () {
         'merchant' => 'My merchant',
     ]);
 
-    expect($validator->passes())->toBeFalsy();
-
+    expect($validator->passes())->toBeFalse();
     expect($validator->validated())->toBe([
         'customer' => [
             'name' => 'John Doe',
@@ -281,7 +279,7 @@ it('stops validating all types when one of them fails', function () {
     ]);
 });
 
-it('runs data successfully validation with array data', function () {
+it('runs successfully validation with array data', function () {
     $validator = new Validator();
 
     $validator->setRules([
@@ -312,3 +310,73 @@ it('runs data successfully validation with array data', function () {
         ],
     ]);
 });
+
+it('runs successfully validation with optional data', function (array $data) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'full_name' => Str::required()->min(8),
+        'address' => Str::optional()->min(10),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBeTrue();
+    // expect($validator->validated())->toBe($data);
+})->with([
+    'present value' => [['full_name' => 'John Doe', 'address' => '350 Fifth Avenue']],
+    'missing value' => [['full_name' => 'John Doe']],
+]);
+
+it('runs failed validation with optional data', function (array $data) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'full_name' => Str::required()->min(8),
+        'address' => Str::optional()->min(10),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBeFalse();
+    expect($validator->validated())->toBe($data);
+})->with([
+    'null value' => [['full_name' => 'John Doe', 'address' => null]],
+    'empty value' => [['full_name' => 'John Doe', 'address' => '']],
+    'empty value with space' => [['full_name' => 'John Doe', 'address' => ' ']],
+]);
+
+it('runs successfully validation with nullable data', function (array $data) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'full_name' => Str::required()->min(8),
+        'address' => Str::nullable()->min(10),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBeTrue();
+    expect($validator->validated())->toBe($data);
+})->with([
+    'present value' => [['full_name' => 'John Doe', 'address' => '350 Fifth Avenue']],
+    'null value' => [['full_name' => 'John Doe', 'address' => null]],
+]);
+
+it('runs failed validation with nullable data', function (array $data) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'full_name' => Str::required()->min(8),
+        'address' => Str::nullable()->min(10),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBeFalse();
+    // expect($validator->validated())->toBe($data);
+})->with([
+    'missing value' => [['full_name' => 'John Doe']],
+    'empty value' => [['full_name' => 'John Doe', 'address' => '']],
+    'empty value with space' => [['full_name' => 'John Doe', 'address' => ' ']],
+]);
