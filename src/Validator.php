@@ -9,8 +9,8 @@ use ArrayIterator;
 use Phenix\Validation\Contracts\Arrayable;
 use Phenix\Validation\Contracts\Rule;
 use Phenix\Validation\Contracts\Type;
+use Phenix\Validation\Exceptions\InvalidData;
 use Phenix\Validation\Rules\Requirement;
-use Phenix\Validation\Types\ArrType;
 use Phenix\Validation\Types\Collection;
 use Phenix\Validation\Types\Dictionary;
 
@@ -44,20 +44,14 @@ class Validator
 
     public function validate(): array
     {
-        $this->reset();
-
-        $this->checkRules($this->rules);
-
-        // foreach ($this->after as $after) {
-        //     $after();
-        // }
+        $this->runValidation();
 
         return $this->validated();
     }
 
     public function passes(): bool
     {
-        $this->validate();
+        $this->runValidation();
 
         return empty($this->failing);
     }
@@ -76,6 +70,12 @@ class Validator
 
     public function validated(): array
     {
+        if (! empty($this->failing)) {
+            $failures = array_keys($this->failing);
+
+            throw new InvalidData('Invalid data detected: ' . array_shift($failures));
+        }
+
         return $this->getDataFromKeys(array_unique($this->validated));
     }
 
@@ -89,19 +89,26 @@ class Validator
         return $this->getDataFromKeys(array_keys($this->failing));
     }
 
-    private function shouldStop(): bool
+    protected function runValidation(): void
+    {
+        $this->reset();
+
+        $this->checkRules($this->rules);
+    }
+
+    protected function shouldStop(): bool
     {
         return $this->stopOnFail && ! empty($this->failing);
     }
 
-    private function reset(): void
+    protected function reset(): void
     {
         $this->failing = [];
         $this->validated = [];
         $this->rules->rewind();
     }
 
-    private function checkRules(ArrayIterator $rules, string|int|null $parent = null): void
+    protected function checkRules(ArrayIterator $rules, string|int|null $parent = null): void
     {
         while ($rules->valid() && ! $this->shouldStop()) {
             $field = $rules->key();
@@ -130,8 +137,12 @@ class Validator
         }
     }
 
-    private function checkDefinition(string $field, Type $type, Arrayable|array $rules, string|int|null $parent = null)
-    {
+    protected function checkDefinition(
+        string $field,
+        Type $type,
+        Arrayable|array $rules,
+        string|int|null $parent = null
+    ): void {
         if (isset($rules)) {
             $rules = new ArrayIterator($rules);
 
@@ -143,7 +154,7 @@ class Validator
         }
     }
 
-    private function checkRule(string $field, Rule $rule, string|int|null $parent = null): bool
+    protected function checkRule(string $field, Rule $rule, string|int|null $parent = null): bool
     {
         $field = $this->implodeKeys([$parent, $field]);
 
@@ -161,7 +172,7 @@ class Validator
         return $passes;
     }
 
-    private function checkCollection(ArrayIterator $rules, string|int|null $parent = null): void
+    protected function checkCollection(ArrayIterator $rules, string|int|null $parent = null): void
     {
         $count = is_null($parent) ? count($this->data) : count($this->data[$parent]);
 
@@ -172,12 +183,12 @@ class Validator
         }
     }
 
-    private function implodeKeys(array $keys): string
+    protected function implodeKeys(array $keys): string
     {
         return implode('.', array_filter($keys, fn ($key) => ! is_null($key)));
     }
 
-    private function getDataFromKeys(array $keys)
+    protected function getDataFromKeys(array $keys)
     {
         $validated = new Dot();
 

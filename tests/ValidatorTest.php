@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
+use Phenix\Validation\Exceptions\InvalidData;
 use Phenix\Validation\Exceptions\InvalidDictionaryDefinition;
 use Phenix\Validation\Rules\IsDictionary;
 use Phenix\Validation\Rules\IsString;
@@ -42,9 +43,6 @@ it('runs failed validation with scalar data', function () {
     ]);
 
     expect($validator->passes())->toBeFalse();
-    expect($validator->validated())->toBe([
-        'name' => null,
-    ]);
 
     expect($validator->failing())->toBe([
         'name' => [Required::class],
@@ -53,7 +51,9 @@ it('runs failed validation with scalar data', function () {
     expect($validator->invalid())->toBe([
         'name' => null,
     ]);
-});
+
+    $validator->validated();
+})->throws(InvalidData::class);
 
 it('runs successfully validation with dictionary data', function () {
     $validator = new Validator();
@@ -115,13 +115,6 @@ it('runs data failed validation with dictionary data', function () {
     ]);
 
     expect($validator->passes())->toBeFalsy();
-
-    expect($validator->validated())->toBe([
-        'customer' => [
-            'name' => 'John',
-            'email' => ['john.doe@mail.com'],
-        ],
-    ]);
 
     expect($validator->failing())->toBe([
         'customer' => [IsDictionary::class],
@@ -222,14 +215,6 @@ it('does not stop validating all types when one of them fails', function () {
     ]);
 
     expect($validator->passes())->toBeFalsy();
-    expect($validator->validated())->toBe([
-        'customer' => [
-            'name' => 'John Doe',
-            'email' => 'john.doe@mail.com',
-        ],
-        'date' => null,
-        'merchant' => 'My merchant',
-    ]);
 
     expect($validator->failing())->toBe([
         'date' => [Required::class],
@@ -238,7 +223,9 @@ it('does not stop validating all types when one of them fails', function () {
     expect($validator->invalid())->toBe([
         'date' => null,
     ]);
-});
+
+    $validator->validated();
+})->throws(InvalidData::class);
 
 it('stops validating all types when one of them fails', function () {
     $validator = new Validator();
@@ -262,13 +249,6 @@ it('stops validating all types when one of them fails', function () {
     ]);
 
     expect($validator->passes())->toBeFalse();
-    expect($validator->validated())->toBe([
-        'customer' => [
-            'name' => 'John Doe',
-            'email' => 'john.doe@mail.com',
-        ],
-        'date' => null,
-    ]);
 
     expect($validator->failing())->toBe([
         'date' => [Required::class],
@@ -277,7 +257,9 @@ it('stops validating all types when one of them fails', function () {
     expect($validator->invalid())->toBe([
         'date' => null,
     ]);
-});
+
+    $validator->validated();
+})->throws(InvalidData::class);
 
 it('runs successfully validation with array data', function () {
     $validator = new Validator();
@@ -339,7 +321,6 @@ it('runs failed validation with optional data', function (array $data) {
     $validator->setData($data);
 
     expect($validator->passes())->toBeFalse();
-    expect($validator->validated())->toBe($data);
 })->with([
     'null value' => [['full_name' => 'John Doe', 'address' => null]],
     'empty value' => [['full_name' => 'John Doe', 'address' => '']],
@@ -374,7 +355,6 @@ it('runs failed validation with nullable data', function (array $data) {
     $validator->setData($data);
 
     expect($validator->passes())->toBeFalse();
-    // expect($validator->validated())->toBe($data);
 })->with([
     'missing value' => [['full_name' => 'John Doe']],
     'empty value' => [['full_name' => 'John Doe', 'address' => '']],
