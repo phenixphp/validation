@@ -22,7 +22,7 @@ class Min extends Rule
         return $this->getValue() >= $this->limit;
     }
 
-    protected function getValue(): int
+    protected function getValue(): float|int
     {
         $value = $this->data->get($this->field) ?? null;
 
