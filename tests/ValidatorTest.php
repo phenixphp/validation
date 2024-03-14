@@ -133,7 +133,7 @@ it('runs successfully validation with collection data', function () {
 
     $validator->setRules([
         'customer' => Collection::required()->min(2)->define([
-            'name' => Str::required()->min(3),
+            'name' => Str::required()->min(3)->max(20),
         ]),
     ]);
 
@@ -267,7 +267,7 @@ it('runs successfully validation with array data', function () {
     $validator->setRules([
         'customer' => Arr::required()->min(2)->define([
             'full_name' => Str::required()->min(8),
-            'links' => ArrList::required()->min(2)->define(Str::required()),
+            'links' => ArrList::required()->min(2)->max(20)->define(Str::required()),
         ]),
     ]);
 
