@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
+use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
 
 abstract class ArrType extends Type
@@ -19,6 +20,8 @@ abstract class ArrType extends Type
 
     public function max(int $limit): static
     {
+        $this->rules[] = Max::new($limit);
+
         return $this;
     }
 

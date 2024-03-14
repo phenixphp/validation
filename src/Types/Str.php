@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Phenix\Validation\Types;
 
 use Phenix\Validation\Rules\IsString;
+use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\TypeRule;
 
 class Str extends Scalar
@@ -24,11 +26,15 @@ class Str extends Scalar
 
     public function max(int $limit): self
     {
+        $this->rules[] = Max::new($limit);
+
         return $this;
     }
 
     public function size(int $limit): self
     {
+        $this->rules[] = Size::new($limit);
+
         return $this;
     }
 
