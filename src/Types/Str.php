@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Rules\IsString;
+use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
-use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\URL;
 use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\IsString;
+use Phenix\Validation\Rules\NotIn;
 use Phenix\Validation\Rules\TypeRule;
 
 class Str extends Scalar
@@ -48,36 +51,43 @@ class Str extends Scalar
 
     public function matchAlpha(): self
     {
+        $this->regex('/^[a-zA-Z]+$/');
+
         return $this;
     }
 
     public function matchAlphaNum(): self
     {
+        $this->regex('/^[a-zA-Z0-9]+$/');
+
         return $this;
     }
 
     public function matchAlphaDash(): self
     {
+        $this->regex('/^[a-zA-Z_-]+$/');
+
         return $this;
     }
 
     public function url(): self
     {
-        return $this;
-    }
+        $this->rules['url'] = URL::new();
 
-    public function activeUrl(): self
-    {
         return $this;
     }
 
     public function in(array $values): self
     {
+        $this->rules['in'] = In::new($values);
+
         return $this;
     }
 
     public function notIn(array $values): self
     {
+        $this->rules['in'] = NotIn::new($values);
+
         return $this;
     }
 
@@ -115,6 +125,4 @@ class Str extends Scalar
     {
         return $this;
     }
-
-    // password
 }
