@@ -55,7 +55,7 @@ abstract class Type implements TypeContract
             'type' => [
                 $this->requirement,
                 $this->type,
-                ...$this->rules,
+                ...array_values($this->rules),
             ],
             'definition' => [],
         ];

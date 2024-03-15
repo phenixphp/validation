@@ -7,6 +7,7 @@ namespace Phenix\Validation\Types;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\TypeRule;
 
@@ -19,27 +20,29 @@ class Str extends Scalar
 
     public function min(int $limit): self
     {
-        $this->rules[] = Min::new($limit);
+        $this->rules['min'] = Min::new($limit);
 
         return $this;
     }
 
     public function max(int $limit): self
     {
-        $this->rules[] = Max::new($limit);
+        $this->rules['max'] = Max::new($limit);
 
         return $this;
     }
 
     public function size(int $limit): self
     {
-        $this->rules[] = Size::new($limit);
+        $this->rules['size'] = Size::new($limit);
 
         return $this;
     }
 
     public function regex(string $regex): self
     {
+        $this->rules['regex'] = RegEx::new($regex);
+
         return $this;
     }
 
