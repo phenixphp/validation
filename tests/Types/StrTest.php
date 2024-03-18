@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
+use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\URL;
 use Phenix\Validation\Types\Str;
 
 it('runs validation with required string data', function (array $data, bool $expected) {
@@ -119,4 +121,58 @@ it('runs validation with regular expression to detect alpha-dash string', functi
 })->with([
     'valid value' => [['value' => 'PHP_'], true],
     'invalid value' => [['value' => 'PHP '], false],
+]);
+
+it('runs validation for urls', function (array $data, bool $expected) {
+    $rules = Str::required()->url()->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof URL) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'valid url' => [['value' => 'http://php.net'], true],
+    'invalid url' => [['value' => 'http//php.net'], false],
+]);
+
+it('runs validation for allowed values in list', function (array $data, array $values, bool $expected) {
+    $rules = Str::required()->in($values)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof In) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'allowed values' => [['value' => '2'], ['1', '2'], true],
+    'invalid allowed values' => [['value' => '3'], ['1', '2'], false],
+]);
+
+it('runs validation for not allowed values in list', function (array $data, array $values, bool $expected) {
+    $rules = Str::required()->notIn($values)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof In) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'not allowed values' => [['value' => '3'], ['1', '2'], true],
+    'invalid not allowed values' => [['value' => '1'], ['1', '2'], false],
 ]);

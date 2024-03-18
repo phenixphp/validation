@@ -79,14 +79,14 @@ class Str extends Scalar
 
     public function in(array $values): self
     {
-        $this->rules['in'] = In::new($values);
+        $this->rules['in'] = In::new(array_values($values));
 
         return $this;
     }
 
     public function notIn(array $values): self
     {
-        $this->rules['in'] = NotIn::new($values);
+        $this->rules['in'] = NotIn::new(array_values($values));
 
         return $this;
     }
