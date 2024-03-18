@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Phenix\Validation\Rules\In;
-use Phenix\Validation\Rules\URL;
-use Phenix\Validation\Types\Str;
-use Phenix\Validation\Rules\Size;
-use Phenix\Validation\Rules\Email;
-use Phenix\Validation\Rules\RegEx;
-use Phenix\Validation\Rules\EndsWith;
-use Phenix\Validation\Rules\StartsWith;
 use Phenix\Validation\Rules\DoesNotEndWith;
 use Phenix\Validation\Rules\DoesNotStartWith;
+use Phenix\Validation\Rules\Email;
+use Phenix\Validation\Rules\EndsWith;
+use Phenix\Validation\Rules\In;
+use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\StartsWith;
+use Phenix\Validation\Rules\URL;
+use Phenix\Validation\Types\Str;
 
 it('runs validation with required string data', function (array $data, bool $expected) {
     $rules = Str::required()->toArray();
