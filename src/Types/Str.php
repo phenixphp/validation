@@ -9,10 +9,12 @@ use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
 use Phenix\Validation\Rules\URL;
 use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\Email;
+use Phenix\Validation\Rules\NotIn;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\IsString;
-use Phenix\Validation\Rules\NotIn;
 use Phenix\Validation\Rules\TypeRule;
+use Egulias\EmailValidator\Validation\EmailValidation;
 
 class Str extends Scalar
 {
@@ -91,8 +93,10 @@ class Str extends Scalar
         return $this;
     }
 
-    public function email(): self
+    public function email(EmailValidation ...$emailValidations): self
     {
+        $this->rules['email'] = Email::new(...$emailValidations);
+
         return $this;
     }
 

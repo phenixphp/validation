@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
@@ -175,4 +176,22 @@ it('runs validation for not allowed values in list', function (array $data, arra
 })->with([
     'not allowed values' => [['value' => '3'], ['1', '2'], true],
     'invalid not allowed values' => [['value' => '1'], ['1', '2'], false],
+]);
+
+it('runs validation for emails with default validators', function (array $data, bool $expected) {
+    $rules = Str::required()->email()->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('email');
+        $rule->setData($data);
+
+        if ($rule instanceof Email) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'valid email' => [['email' => 'john.doe@gmail.com'], true],
+    'invalid email' => [['email' => 'john.doe.gmail.com'], false],
 ]);
