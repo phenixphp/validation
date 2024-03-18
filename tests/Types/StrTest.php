@@ -2,14 +2,16 @@
 
 declare(strict_types=1);
 
-use Phenix\Validation\Rules\DoesNotStartsWith;
-use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\In;
-use Phenix\Validation\Rules\RegEx;
-use Phenix\Validation\Rules\Size;
-use Phenix\Validation\Rules\StartsWith;
 use Phenix\Validation\Rules\URL;
 use Phenix\Validation\Types\Str;
+use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\Email;
+use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\EndsWith;
+use Phenix\Validation\Rules\StartsWith;
+use Phenix\Validation\Rules\DoesNotEndWith;
+use Phenix\Validation\Rules\DoesNotStartWith;
 
 it('runs validation with required string data', function (array $data, bool $expected) {
     $rules = Str::required()->toArray();
@@ -223,7 +225,7 @@ it('runs validation to check if string does not start with', function (array $da
         $rule->setField('value');
         $rule->setData($data);
 
-        if ($rule instanceof DoesNotStartsWith) {
+        if ($rule instanceof DoesNotStartWith) {
             expect($rule->passes())->toBe($expected);
         } else {
             expect($rule->passes())->toBeTruthy();
@@ -232,4 +234,40 @@ it('runs validation to check if string does not start with', function (array $da
 })->with([
     'value does not start with PHP' => [['value' => 'JS code'], 'PHP', true],
     'value starts with PHP' => [['value' => 'PHP code'], 'PHP', false],
+]);
+
+it('runs validation to check if string ends with', function (array $data, string $needle, bool $expected) {
+    $rules = Str::required()->endsWidth($needle)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof EndsWith) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'value ends with PHP' => [['value' => 'The best language is PHP'], 'PHP', true],
+    'value does not end with PHP' => [['value' => 'The best language is JS'], 'PHP', false],
+]);
+
+it('runs validation to check if string does not end with', function (array $data, string $needle, bool $expected) {
+    $rules = Str::required()->doesNotEndWidth($needle)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof DoesNotEndWith) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'value does not end with PHP' => [['value' => 'The best language is JS'], 'PHP', true],
+    'value ends with PHP' => [['value' => 'The best language is PHP'], 'PHP', false],
 ]);

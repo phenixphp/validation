@@ -12,11 +12,13 @@ use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\NotIn;
 use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\EndsWith;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Rules\TypeRule;
-use Egulias\EmailValidator\Validation\EmailValidation;
-use Phenix\Validation\Rules\DoesNotStartsWith;
 use Phenix\Validation\Rules\StartsWith;
+use Phenix\Validation\Rules\DoesNotEndWith;
+use Phenix\Validation\Rules\DoesNotStartWith;
+use Egulias\EmailValidator\Validation\EmailValidation;
 
 class Str extends Scalar
 {
@@ -104,25 +106,29 @@ class Str extends Scalar
 
     public function startsWidth(string $needle): self
     {
-        $this->rules['start_with'] = StartsWith::new($needle);
+        $this->rules['starts_with'] = StartsWith::new($needle);
+
+        return $this;
+    }
+
+    public function doesNotStartWidth(string $needle): self
+    {
+        $this->rules['does_not_start_with'] = DoesNotStartWith::new($needle);
 
         return $this;
     }
 
     public function endsWidth(string $needle): self
     {
-        return $this;
-    }
-
-    public function doesNotStartWidth(string $needle): self
-    {
-        $this->rules['does_not_start_with'] = DoesNotStartsWith::new($needle);
+        $this->rules['ends_with'] = EndsWith::new($needle);
 
         return $this;
     }
 
     public function doesNotEndWidth(string $needle): self
     {
+        $this->rules['does_not_end_with'] = DoesNotEndWith::new($needle);
+
         return $this;
     }
 
