@@ -27,13 +27,23 @@ it('checks minimum values according to data type', function (
     'object value' => [
         2,
         'customer',
-        ['customer' => new class implements Countable { public function count(): int { return 2; } }],
+        ['customer' => new class () implements Countable {
+            public function count(): int
+            {
+                return 2;
+            }
+        }],
         true,
     ],
     'invalid object value' => [
         2,
         'customer',
-        ['customer' => new class implements Countable { public function count(): int { return 1; } }],
-        false
+        ['customer' => new class () implements Countable {
+            public function count(): int
+            {
+                return 1;
+            }
+        }],
+        false,
     ],
 ]);

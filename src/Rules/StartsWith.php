@@ -8,7 +8,8 @@ class StartsWith extends Rule
 {
     public function __construct(
         protected string $needle
-    ) {}
+    ) {
+    }
 
     public function passes(): bool
     {

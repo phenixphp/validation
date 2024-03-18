@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Phenix\Validation\Rules\In;
-use Phenix\Validation\Rules\Max;
-use Phenix\Validation\Rules\Min;
-use Phenix\Validation\Rules\URL;
-use Phenix\Validation\Rules\Size;
-use Phenix\Validation\Rules\Email;
-use Phenix\Validation\Rules\NotIn;
-use Phenix\Validation\Rules\RegEx;
-use Phenix\Validation\Rules\EndsWith;
-use Phenix\Validation\Rules\IsString;
-use Phenix\Validation\Rules\TypeRule;
-use Phenix\Validation\Rules\StartsWith;
+use Egulias\EmailValidator\Validation\EmailValidation;
 use Phenix\Validation\Rules\DoesNotEndWith;
 use Phenix\Validation\Rules\DoesNotStartWith;
-use Egulias\EmailValidator\Validation\EmailValidation;
+use Phenix\Validation\Rules\Email;
+use Phenix\Validation\Rules\EndsWith;
+use Phenix\Validation\Rules\In;
+use Phenix\Validation\Rules\IsString;
+use Phenix\Validation\Rules\Max;
+use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\NotIn;
+use Phenix\Validation\Rules\RegEx;
+use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\StartsWith;
+use Phenix\Validation\Rules\TypeRule;
+use Phenix\Validation\Rules\URL;
 
 class Str extends Scalar
 {

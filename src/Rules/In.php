@@ -10,7 +10,8 @@ class In extends Rule
 {
     public function __construct(
         protected array $haystack
-    ) {}
+    ) {
+    }
 
     public function passes(): bool
     {

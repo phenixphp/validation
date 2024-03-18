@@ -8,6 +8,6 @@ class DoesNotStartWith extends StartsWith
 {
     public function passes(): bool
     {
-        return !parent::passes();
+        return ! parent::passes();
     }
 }

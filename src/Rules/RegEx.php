@@ -8,7 +8,8 @@ class RegEx extends Rule
 {
     public function __construct(
         protected string $regEx
-    ) {}
+    ) {
+    }
 
     public function passes(): bool
     {

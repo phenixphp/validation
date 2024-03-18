@@ -8,6 +8,6 @@ class NotIn extends In
 {
     public function passes(): bool
     {
-        return !parent::passes();
+        return ! parent::passes();
     }
 }
