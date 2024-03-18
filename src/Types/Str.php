@@ -15,6 +15,8 @@ use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\IsString;
 use Phenix\Validation\Rules\TypeRule;
 use Egulias\EmailValidator\Validation\EmailValidation;
+use Phenix\Validation\Rules\DoesNotStartsWith;
+use Phenix\Validation\Rules\StartsWith;
 
 class Str extends Scalar
 {
@@ -100,22 +102,26 @@ class Str extends Scalar
         return $this;
     }
 
-    public function startWidth(string $value): self
+    public function startsWidth(string $needle): self
+    {
+        $this->rules['start_with'] = StartsWith::new($needle);
+
+        return $this;
+    }
+
+    public function endsWidth(string $needle): self
     {
         return $this;
     }
 
-    public function endWidth(string $value): self
+    public function doesNotStartWidth(string $needle): self
     {
+        $this->rules['does_not_start_with'] = DoesNotStartsWith::new($needle);
+
         return $this;
     }
 
-    public function doesNotStartWidth(string $value): self
-    {
-        return $this;
-    }
-
-    public function doesNotEndWidth(string $value): self
+    public function doesNotEndWidth(string $needle): self
     {
         return $this;
     }

@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
+use Phenix\Validation\Rules\DoesNotStartsWith;
 use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
+use Phenix\Validation\Rules\StartsWith;
 use Phenix\Validation\Rules\URL;
 use Phenix\Validation\Types\Str;
 
@@ -194,4 +196,40 @@ it('runs validation for emails with default validators', function (array $data, 
 })->with([
     'valid email' => [['email' => 'john.doe@gmail.com'], true],
     'invalid email' => [['email' => 'john.doe.gmail.com'], false],
+]);
+
+it('runs validation to check if string starts with', function (array $data, string $needle, bool $expected) {
+    $rules = Str::required()->startsWidth($needle)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof StartsWith) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'value starts with PHP' => [['value' => 'PHP code'], 'PHP', true],
+    'value does not start with PHP' => [['value' => 'JS code'], 'PHP', false],
+]);
+
+it('runs validation to check if string does not start with', function (array $data, string $needle, bool $expected) {
+    $rules = Str::required()->doesNotStartWidth($needle)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('value');
+        $rule->setData($data);
+
+        if ($rule instanceof DoesNotStartsWith) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'value does not start with PHP' => [['value' => 'JS code'], 'PHP', true],
+    'value starts with PHP' => [['value' => 'PHP code'], 'PHP', false],
 ]);
