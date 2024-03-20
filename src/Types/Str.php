@@ -18,7 +18,9 @@ use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\StartsWith;
 use Phenix\Validation\Rules\TypeRule;
+use Phenix\Validation\Rules\Ulid;
 use Phenix\Validation\Rules\URL;
+use Phenix\Validation\Rules\Uuid;
 
 class Str extends Scalar
 {
@@ -134,11 +136,15 @@ class Str extends Scalar
 
     public function uuid(): self
     {
+        $this->rules['uuid'] = Uuid::new();
+
         return $this;
     }
 
     public function ulid(): self
     {
+        $this->rules['ulid'] = Ulid::new();
+
         return $this;
     }
 }

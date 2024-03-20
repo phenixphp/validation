@@ -304,7 +304,6 @@ it('runs successfully validation with optional data', function (array $data) {
     $validator->setData($data);
 
     expect($validator->passes())->toBeTrue();
-    // expect($validator->validated())->toBe($data);
 })->with([
     'present value' => [['full_name' => 'John Doe', 'address' => '350 Fifth Avenue']],
     'missing value' => [['full_name' => 'John Doe']],
