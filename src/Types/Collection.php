@@ -6,7 +6,6 @@ namespace Phenix\Validation\Types;
 
 use Phenix\Validation\Exceptions\InvalidCollectionDefinition;
 use Phenix\Validation\Rules\IsCollection;
-
 use Phenix\Validation\Rules\TypeRule;
 
 class Collection extends DefinableArrType
