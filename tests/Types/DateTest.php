@@ -200,3 +200,84 @@ it('runs validation to check received date with format', function (
         false,
     ],
 ]);
+
+it('runs dates validation using shortcut methods', function (
+    string $method,
+    string $ruleClass,
+    array $data,
+    bool $expected
+) {
+    $rules = Date::required()->{$method}()->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField('date');
+        $rule->setData($data);
+
+        if ($rule::class === $ruleClass) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'date is equal today' => [
+        'equalToday',
+        EqualDates::class,
+        ['date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'date is not equal today' => [
+        'equalToday',
+        EqualDates::class,
+        ['date' => Dates::now()->addDay()->toDateString()],
+        false,
+    ],
+    'date is after today' => [
+        'afterToday',
+        After::class,
+        ['date' => Dates::now()->addDay()->toDateString()],
+        true,
+    ],
+    'date is not after today' => [
+        'afterToday',
+        After::class,
+        ['date' => Dates::now()->toDateString()],
+        false,
+    ],
+    'date is before today' => [
+        'beforeToday',
+        Before::class,
+        ['date' => Dates::now()->subDay()->toDateString()],
+        true,
+    ],
+    'date is not before today' => [
+        'beforeToday',
+        Before::class,
+        ['date' => Dates::now()->toDateString()],
+        false,
+    ],
+    'date is after or equal today' => [
+        'afterOrEqualToday',
+        AfterOrEqual::class,
+        ['date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'date is not after or equal today' => [
+        'afterOrEqualToday',
+        AfterOrEqual::class,
+        ['date' => Dates::now()->subDay()->toDateString()],
+        false,
+    ],
+    'date is before or equal today' => [
+        'beforeOrEqualToday',
+        BeforeOrEqual::class,
+        ['date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'date is not before or equal today' => [
+        'beforeOrEqualToday',
+        BeforeOrEqual::class,
+        ['date' => Dates::now()->addDay()->toDateString()],
+        false,
+    ],
+]);

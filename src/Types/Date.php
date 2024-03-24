@@ -63,6 +63,40 @@ class Date extends Type
         return $this;
     }
 
-    // Shorcuts: equalToday, afterToday, beforeToday, afterOrEqualToday, beforeOrEqualToday
-    // Relateds: equalOf, afterOf, beforeOf, afterOrEqualOf, beforeOrEqualOf
+    public function equalToday(): self
+    {
+        $this->rules['equal_today'] = EqualDates::new(Dates::today());
+
+        return $this;
+    }
+
+    public function afterToday(): self
+    {
+        $this->rules['after'] = After::new(Dates::today());
+
+        return $this;
+    }
+
+    public function beforeToday(): self
+    {
+        $this->rules['before'] = Before::new(Dates::today());
+
+        return $this;
+    }
+
+    public function afterOrEqualToday(): self
+    {
+        $this->rules['after_or_equal_today'] = AfterOrEqual::new(Dates::today());
+
+        return $this;
+    }
+
+    public function beforeOrEqualToday(): self
+    {
+        $this->rules['before_or_equal_today'] = BeforeOrEqual::new(Dates::today());
+
+        return $this;
+    }
+
+    public function equalTo(string $field): self
 }
