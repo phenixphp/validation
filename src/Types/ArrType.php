@@ -6,6 +6,7 @@ namespace Phenix\Validation\Types;
 
 use Phenix\Validation\Rules\Max;
 use Phenix\Validation\Rules\Min;
+use Phenix\Validation\Rules\Size;
 
 abstract class ArrType extends Type
 {
@@ -13,14 +14,21 @@ abstract class ArrType extends Type
 
     public function min(int $limit): static
     {
-        $this->rules[] = Min::new($limit);
+        $this->rules['min'] = Min::new($limit);
 
         return $this;
     }
 
     public function max(int $limit): static
     {
-        $this->rules[] = Max::new($limit);
+        $this->rules['max'] = Max::new($limit);
+
+        return $this;
+    }
+
+    public function size(int $limit): static
+    {
+        $this->rules['size'] = Size::new($limit);
 
         return $this;
     }

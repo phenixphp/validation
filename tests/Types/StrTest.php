@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 use Phenix\Validation\Rules\DoesNotEndWith;
 use Phenix\Validation\Rules\DoesNotStartWith;
-use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\EndsWith;
 use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\StartsWith;
-use Phenix\Validation\Rules\Ulid;
-use Phenix\Validation\Rules\URL;
-use Phenix\Validation\Rules\Uuid;
 use Phenix\Validation\Types\Str;
-use Phenix\Validation\Util\Str as Strings;
 
 it('runs validation with required string data', function (array $data, bool $expected) {
     $rules = Str::required()->toArray();
@@ -131,24 +126,6 @@ it('runs validation with regular expression to detect alpha-dash string', functi
     'invalid value' => [['value' => 'PHP '], false],
 ]);
 
-it('runs validation for urls', function (array $data, bool $expected) {
-    $rules = Str::required()->url()->toArray();
-
-    foreach ($rules['type'] as $rule) {
-        $rule->setField('value');
-        $rule->setData($data);
-
-        if ($rule instanceof URL) {
-            expect($rule->passes())->toBe($expected);
-        } else {
-            expect($rule->passes())->toBeTruthy();
-        }
-    }
-})->with([
-    'valid url' => [['value' => 'http://php.net'], true],
-    'invalid url' => [['value' => 'http//php.net'], false],
-]);
-
 it('runs validation for allowed values in list', function (array $data, array $values, bool $expected) {
     $rules = Str::required()->in($values)->toArray();
 
@@ -183,24 +160,6 @@ it('runs validation for not allowed values in list', function (array $data, arra
 })->with([
     'not allowed values' => [['value' => '3'], ['1', '2'], true],
     'invalid not allowed values' => [['value' => '1'], ['1', '2'], false],
-]);
-
-it('runs validation for emails with default validators', function (array $data, bool $expected) {
-    $rules = Str::required()->email()->toArray();
-
-    foreach ($rules['type'] as $rule) {
-        $rule->setField('email');
-        $rule->setData($data);
-
-        if ($rule instanceof Email) {
-            expect($rule->passes())->toBe($expected);
-        } else {
-            expect($rule->passes())->toBeTruthy();
-        }
-    }
-})->with([
-    'valid email' => [['email' => 'john.doe@gmail.com'], true],
-    'invalid email' => [['email' => 'john.doe.gmail.com'], false],
 ]);
 
 it('runs validation to check if string starts with', function (array $data, string $needle, bool $expected) {
@@ -273,40 +232,4 @@ it('runs validation to check if string does not end with', function (array $data
 })->with([
     'value does not end with PHP' => [['value' => 'The best language is JS'], 'PHP', true],
     'value ends with PHP' => [['value' => 'The best language is PHP'], 'PHP', false],
-]);
-
-it('runs validation to check if string is a valid UUID', function (array $data, bool $expected) {
-    $rules = Str::required()->uuid()->toArray();
-
-    foreach ($rules['type'] as $rule) {
-        $rule->setField('value');
-        $rule->setData($data);
-
-        if ($rule instanceof Uuid) {
-            expect($rule->passes())->toBe($expected);
-        } else {
-            expect($rule->passes())->toBeTruthy();
-        }
-    }
-})->with([
-    'valid UUID' => [['value' => (string) Strings::uuid()], true],
-    'invalid UUID' => [['value' => 'abc-123'], false],
-]);
-
-it('runs validation to check if string is a valid ULID', function (array $data, bool $expected) {
-    $rules = Str::required()->ulid()->toArray();
-
-    foreach ($rules['type'] as $rule) {
-        $rule->setField('value');
-        $rule->setData($data);
-
-        if ($rule instanceof Ulid) {
-            expect($rule->passes())->toBe($expected);
-        } else {
-            expect($rule->passes())->toBeTruthy();
-        }
-    }
-})->with([
-    'valid ULID' => [['value' => (string) Strings::ulid()], true],
-    'invalid ULID' => [['value' => 'abc-123'], false],
 ]);

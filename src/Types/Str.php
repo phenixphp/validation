@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Phenix\Validation\Types;
 
-use Egulias\EmailValidator\Validation\EmailValidation;
 use Phenix\Validation\Rules\DoesNotEndWith;
 use Phenix\Validation\Rules\DoesNotStartWith;
-use Phenix\Validation\Rules\Email;
 use Phenix\Validation\Rules\EndsWith;
 use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\IsString;
@@ -18,9 +16,6 @@ use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\StartsWith;
 use Phenix\Validation\Rules\TypeRule;
-use Phenix\Validation\Rules\Ulid;
-use Phenix\Validation\Rules\URL;
-use Phenix\Validation\Rules\Uuid;
 
 class Str extends Scalar
 {
@@ -78,13 +73,6 @@ class Str extends Scalar
         return $this;
     }
 
-    public function url(): self
-    {
-        $this->rules['url'] = URL::new();
-
-        return $this;
-    }
-
     public function in(array $values): self
     {
         $this->rules['in'] = In::new(array_values($values));
@@ -95,13 +83,6 @@ class Str extends Scalar
     public function notIn(array $values): self
     {
         $this->rules['in'] = NotIn::new(array_values($values));
-
-        return $this;
-    }
-
-    public function email(EmailValidation ...$emailValidations): self
-    {
-        $this->rules['email'] = Email::new(...$emailValidations);
 
         return $this;
     }
@@ -130,20 +111,6 @@ class Str extends Scalar
     public function doesNotEndWidth(string $needle): self
     {
         $this->rules['does_not_end_with'] = DoesNotEndWith::new($needle);
-
-        return $this;
-    }
-
-    public function uuid(): self
-    {
-        $this->rules['uuid'] = Uuid::new();
-
-        return $this;
-    }
-
-    public function ulid(): self
-    {
-        $this->rules['ulid'] = Ulid::new();
 
         return $this;
     }

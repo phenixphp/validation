@@ -10,22 +10,29 @@ use Egulias\EmailValidator\Validation\MultipleValidationWithAnd;
 use Egulias\EmailValidator\Validation\RFCValidation;
 use Phenix\Validation\Validations\EmailValidation as FilterEmailValidation;
 
-class Email extends Rule
+class IsEmail extends IsString
 {
     protected array $emailValidations;
 
-    public function __construct(EmailValidation ...$emailValidations)
+    public function __construct()
     {
-        $this->emailValidations = $emailValidations ?: [new FilterEmailValidation(), new RFCValidation()];
+        $this->emailValidations = [new FilterEmailValidation(), new RFCValidation()];
     }
 
     public function passes(): bool
     {
         $emailValidator = new EmailValidator();
 
-        return $emailValidator->isValid(
+        return parent::passes() && $emailValidator->isValid(
             $this->getValue(),
             new MultipleValidationWithAnd($this->emailValidations)
         );
+    }
+
+    public function pusValidation(EmailValidation $emailValidation): self
+    {
+        $this->emailValidations[] = $emailValidation;
+
+        return $this;
     }
 }
