@@ -67,7 +67,7 @@ class Date extends Str
 
     public function equalToday(): self
     {
-        $this->rules['equal_today'] = EqualDates::new(Dates::today());
+        $this->rules['equal_today'] = Equal::new(Dates::today());
 
         return $this;
     }
