@@ -423,3 +423,41 @@ it('runs successful validation with date related to date in a dictionary', funct
         false,
     ],
 ]);
+
+it('runs successful validation with date related to date in a collection', function (array $data, bool $expected) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'flies' => Collection::required()->max(2)->define([
+            'departure_date' => Date::required()->equalToday(),
+            'return_date' => Date::required()->equalTo('departure_date'),
+        ]),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBe($expected);
+})->with([
+    'date is equal to related date' => [
+        [
+            'flies' => [
+                [
+                    'departure_date' => Dates::now()->toDateString(),
+                    'return_date' => Dates::now()->toDateString(),
+                ]
+            ],
+        ],
+        true,
+    ],
+    'date is not equal to related date' => [
+        [
+            'flies' => [
+                [
+                    'departure_date' => Dates::now()->toDateString(),
+                    'return_date' => Dates::now()->addDay()->toDateString(),
+                ]
+            ],
+        ],
+        false,
+    ],
+]);
