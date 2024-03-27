@@ -143,14 +143,12 @@ class Validator
         Arrayable|array $rules,
         string|int|null $parent = null
     ): void {
-        if (isset($rules)) {
-            $rules = new ArrayIterator($rules);
+        $rules = new ArrayIterator($rules);
 
-            if ($type instanceof Collection) {
-                $this->checkCollection($rules, $this->implodeKeys([$parent, $field]));
-            } else {
-                $this->checkRules($rules, $this->implodeKeys([$parent, $field]));
-            }
+        if ($type instanceof Collection) {
+            $this->checkCollection($rules, $this->implodeKeys([$parent, $field]));
+        } else {
+            $this->checkRules($rules, $this->implodeKeys([$parent, $field]));
         }
     }
 

@@ -11,8 +11,10 @@ use Phenix\Validation\Rules\Required;
 use Phenix\Validation\Types\Arr;
 use Phenix\Validation\Types\ArrList;
 use Phenix\Validation\Types\Collection;
+use Phenix\Validation\Types\Date;
 use Phenix\Validation\Types\Dictionary;
 use Phenix\Validation\Types\Str;
+use Phenix\Validation\Util\Date as Dates;
 use Phenix\Validation\Validator;
 
 it('runs successfully validation with scalar data', function () {
@@ -358,4 +360,66 @@ it('runs failed validation with nullable data', function (array $data) {
     'missing value' => [['full_name' => 'John Doe']],
     'empty value' => [['full_name' => 'John Doe', 'address' => '']],
     'empty value with space' => [['full_name' => 'John Doe', 'address' => ' ']],
+]);
+
+it('runs successful validation with date related to date', function (array $data, bool $expected) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'departure_date' => Date::required()->equalToday(),
+        'return_date' => Date::required()->equalTo('departure_date'),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBe($expected);
+})->with([
+    'date is equal to related date' => [
+        [
+            'departure_date' => Dates::now()->toDateString(),
+            'return_date' => Dates::now()->toDateString(),
+        ],
+        true,
+    ],
+    'date is not equal to related date' => [
+        [
+            'departure_date' => Dates::now()->toDateString(),
+            'return_date' => Dates::now()->addDay()->toDateString(),
+        ],
+        false,
+    ],
+]);
+
+it('runs successful validation with date related to date in a dictionary', function (array $data, bool $expected) {
+    $validator = new Validator();
+
+    $validator->setRules([
+        'dates' => Dictionary::required()->size(2)->define([
+            'departure_date' => Date::required()->equalToday(),
+            'return_date' => Date::required()->equalTo('departure_date'),
+        ]),
+    ]);
+
+    $validator->setData($data);
+
+    expect($validator->passes())->toBe($expected);
+})->with([
+    'date is equal to related date' => [
+        [
+            'dates' => [
+                'departure_date' => Dates::now()->toDateString(),
+                'return_date' => Dates::now()->toDateString(),
+            ],
+        ],
+        true,
+    ],
+    'date is not equal to related date' => [
+        [
+            'dates' => [
+                'departure_date' => Dates::now()->toDateString(),
+                'return_date' => Dates::now()->addDay()->toDateString(),
+            ],
+        ],
+        false,
+    ],
 ]);
