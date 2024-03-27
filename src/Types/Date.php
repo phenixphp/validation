@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace Phenix\Validation\Types;
 
 use DateTimeInterface;
-use Phenix\Validation\Rules\After;
-use Phenix\Validation\Rules\AfterOrEqual;
-use Phenix\Validation\Rules\Before;
-use Phenix\Validation\Rules\BeforeOrEqual;
-use Phenix\Validation\Rules\DateFormat;
-use Phenix\Validation\Rules\EqualDates;
-use Phenix\Validation\Rules\IsDate;
+use Phenix\Validation\Rules\Dates\After;
+use Phenix\Validation\Rules\Dates\AfterOrEqual;
+use Phenix\Validation\Rules\Dates\Before;
+use Phenix\Validation\Rules\Dates\BeforeOrEqual;
+use Phenix\Validation\Rules\Dates\Equal;
+use Phenix\Validation\Rules\Dates\EqualTo;
+use Phenix\Validation\Rules\Dates\Format;
+use Phenix\Validation\Rules\Dates\IsDate;
 use Phenix\Validation\Rules\TypeRule;
+use Phenix\Validation\Util\Date as Dates;
 
-class Date extends Type
+class Date extends Str
 {
     protected function defineType(): TypeRule
     {
@@ -23,7 +25,7 @@ class Date extends Type
 
     public function equal(DateTimeInterface|string $date): self
     {
-        $this->rules['equal'] = EqualDates::new($date);
+        $this->rules['equal'] = Equal::new($date);
 
         return $this;
     }
@@ -58,7 +60,7 @@ class Date extends Type
 
     public function format(string $format): self
     {
-        $this->rules['date_format'] = DateFormat::new($format);
+        $this->rules['date_format'] = Format::new($format);
 
         return $this;
     }
@@ -99,4 +101,37 @@ class Date extends Type
     }
 
     public function equalTo(string $field): self
+    {
+        $this->rules['equal_to'] = EqualTo::new($field);
+
+        return $this;
+    }
+
+    public function afterTo(string $field): self
+    {
+        $this->rules['after_to'] = $field;
+
+        return $this;
+    }
+
+    public function beforeTo(string $field): self
+    {
+        $this->rules['before_to'] = $field;
+
+        return $this;
+    }
+
+    public function afterOrEqualTo(string $field): self
+    {
+        $this->rules['after_or_equal_to'] = $field;
+
+        return $this;
+    }
+
+    public function beforeOrEqualTo(string $field): self
+    {
+        $this->rules['before_or_equal_to'] = $field;
+
+        return $this;
+    }
 }

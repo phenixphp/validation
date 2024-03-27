@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Phenix\Validation\Rules;
+namespace Phenix\Validation\Rules\Dates;
 
 use DateTime;
+use Phenix\Validation\Rules\IsString;
 use Throwable;
 
 use function is_string;

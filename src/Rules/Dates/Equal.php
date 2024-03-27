@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Phenix\Validation\Rules;
+namespace Phenix\Validation\Rules\Dates;
 
 use DateTimeInterface;
+use Phenix\Validation\Rules\Rule;
 use Phenix\Validation\Util\Date;
 
-class EqualDates extends Rule
+class Equal extends Rule
 {
     protected Date $date;
 

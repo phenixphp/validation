@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Phenix\Validation\Rules;
+namespace Phenix\Validation\Rules\Dates;
 
+use Phenix\Validation\Rules\Rule;
 use Phenix\Validation\Util\Date;
 
-class DateEqualTo extends Rule
+class EqualTo extends Rule
 {
     public function __construct(
         protected string $relatedField
