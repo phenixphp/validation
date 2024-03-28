@@ -444,7 +444,7 @@ it('runs successful validation with date related to date in a collection', funct
                 [
                     'departure_date' => Dates::now()->toDateString(),
                     'return_date' => Dates::now()->toDateString(),
-                ]
+                ],
             ],
         ],
         true,
@@ -455,7 +455,7 @@ it('runs successful validation with date related to date in a collection', funct
                 [
                     'departure_date' => Dates::now()->toDateString(),
                     'return_date' => Dates::now()->addDay()->toDateString(),
-                ]
+                ],
             ],
         ],
         false,

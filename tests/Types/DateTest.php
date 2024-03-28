@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 use Phenix\Validation\Rules\Dates\After;
 use Phenix\Validation\Rules\Dates\AfterOrEqual;
+use Phenix\Validation\Rules\Dates\AfterOrEqualTo;
+use Phenix\Validation\Rules\Dates\AfterTo;
 use Phenix\Validation\Rules\Dates\Before;
 use Phenix\Validation\Rules\Dates\BeforeOrEqual;
+use Phenix\Validation\Rules\Dates\BeforeOrEqualTo;
+use Phenix\Validation\Rules\Dates\BeforeTo;
 use Phenix\Validation\Rules\Dates\Equal;
 use Phenix\Validation\Rules\Dates\Format;
 use Phenix\Validation\Rules\Dates\IsDate;
@@ -278,6 +282,93 @@ it('runs dates validation using shortcut methods', function (
         'beforeOrEqualToday',
         BeforeOrEqual::class,
         ['date' => Dates::now()->addDay()->toDateString()],
+        false,
+    ],
+]);
+
+it('runs dates validation for related fields', function (
+    string $method,
+    string $field,
+    string $relatedField,
+    string $ruleClass,
+    array $data,
+    bool $expected
+) {
+    $rules = Date::required()->{$method}($relatedField)->toArray();
+
+    foreach ($rules['type'] as $rule) {
+        $rule->setField($field);
+        $rule->setData($data);
+
+        if ($rule::class === $ruleClass) {
+            expect($rule->passes())->toBe($expected);
+        } else {
+            expect($rule->passes())->toBeTruthy();
+        }
+    }
+})->with([
+    'end date is after than start date' => [
+        'afterTo',
+        'end_date',
+        'start_date',
+        AfterTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->addDay()->toDateString()],
+        true,
+    ],
+    'end date is not after than start date' => [
+        'afterTo',
+        'end_date',
+        'start_date',
+        AfterTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->toDateString()],
+        false,
+    ],
+    'start date is before than end date' => [
+        'beforeTo',
+        'start_date',
+        'end_date',
+        BeforeTo::class,
+        ['start_date' => Dates::now()->subDay()->toDateString(), 'end_date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'start date is not before than end date' => [
+        'beforeTo',
+        'start_date',
+        'end_date',
+        BeforeTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->toDateString()],
+        false,
+    ],
+    'end date is after or equal than to the start date' => [
+        'afterOrEqualTo',
+        'end_date',
+        'start_date',
+        AfterOrEqualTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'end date is not after or equal than to the start date' => [
+        'afterOrEqualTo',
+        'end_date',
+        'start_date',
+        AfterOrEqualTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->subDay()->toDateString()],
+        false,
+    ],
+    'start date is before or equal than to the end date' => [
+        'beforeOrEqualTo',
+        'start_date',
+        'end_date',
+        BeforeOrEqualTo::class,
+        ['start_date' => Dates::now()->toDateString(), 'end_date' => Dates::now()->toDateString()],
+        true,
+    ],
+    'start date is not before or equal than to the end date' => [
+        'beforeOrEqualTo',
+        'start_date',
+        'end_date',
+        BeforeOrEqualTo::class,
+        ['start_date' => Dates::now()->addDay()->toDateString(), 'end_date' => Dates::now()->toDateString()],
         false,
     ],
 ]);

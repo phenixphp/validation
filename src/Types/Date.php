@@ -7,8 +7,12 @@ namespace Phenix\Validation\Types;
 use DateTimeInterface;
 use Phenix\Validation\Rules\Dates\After;
 use Phenix\Validation\Rules\Dates\AfterOrEqual;
+use Phenix\Validation\Rules\Dates\AfterOrEqualTo;
+use Phenix\Validation\Rules\Dates\AfterTo;
 use Phenix\Validation\Rules\Dates\Before;
 use Phenix\Validation\Rules\Dates\BeforeOrEqual;
+use Phenix\Validation\Rules\Dates\BeforeOrEqualTo;
+use Phenix\Validation\Rules\Dates\BeforeTo;
 use Phenix\Validation\Rules\Dates\Equal;
 use Phenix\Validation\Rules\Dates\EqualTo;
 use Phenix\Validation\Rules\Dates\Format;
@@ -109,28 +113,28 @@ class Date extends Str
 
     public function afterTo(string $field): self
     {
-        $this->rules['after_to'] = $field;
+        $this->rules['after_to'] = AfterTo::new($field);
 
         return $this;
     }
 
     public function beforeTo(string $field): self
     {
-        $this->rules['before_to'] = $field;
+        $this->rules['before_to'] = BeforeTo::new($field);
 
         return $this;
     }
 
     public function afterOrEqualTo(string $field): self
     {
-        $this->rules['after_or_equal_to'] = $field;
+        $this->rules['after_or_equal_to'] = AfterOrEqualTo::new($field);
 
         return $this;
     }
 
     public function beforeOrEqualTo(string $field): self
     {
-        $this->rules['before_or_equal_to'] = $field;
+        $this->rules['before_or_equal_to'] = BeforeOrEqualTo::new($field);
 
         return $this;
     }
