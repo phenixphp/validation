@@ -19,6 +19,7 @@
         "adbario/php-dot-notation": "^3.3",
         "egulias/email-validator": "^4.0",
         "nesbot/carbon": "^3.1",
+        "ramsey/uuid": "^4.7",
         "symfony/uid": "^7.0"
     },
     "require-dev": {
