@@ -9,3 +9,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Str, boolean, date, email, UID, URL types. ([#3](https://github.com/phenixphp/validation/pull/3))
+- Integer type. ([#4](https://github.com/phenixphp/validation/pull/4))
