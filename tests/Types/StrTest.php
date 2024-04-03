@@ -6,6 +6,7 @@ use Phenix\Validation\Rules\DoesNotEndWith;
 use Phenix\Validation\Rules\DoesNotStartWith;
 use Phenix\Validation\Rules\EndsWith;
 use Phenix\Validation\Rules\In;
+use Phenix\Validation\Rules\NotIn;
 use Phenix\Validation\Rules\RegEx;
 use Phenix\Validation\Rules\Size;
 use Phenix\Validation\Rules\StartsWith;
@@ -151,7 +152,7 @@ it('runs validation for not allowed values in list', function (array $data, arra
         $rule->setField('value');
         $rule->setData($data);
 
-        if ($rule instanceof In) {
+        if ($rule instanceof NotIn) {
             expect($rule->passes())->toBe($expected);
         } else {
             expect($rule->passes())->toBeTruthy();
