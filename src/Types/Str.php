@@ -82,7 +82,7 @@ class Str extends Scalar
 
     public function notIn(array $values): self
     {
-        $this->rules['in'] = NotIn::new(array_values($values));
+        $this->rules['not_in'] = NotIn::new(array_values($values));
 
         return $this;
     }
