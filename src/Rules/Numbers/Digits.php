@@ -8,9 +8,11 @@ use Phenix\Validation\Rules\Rule;
 
 class Digits extends Rule
 {
-    public function __construct(
-        protected int $digits
-    ) {
+    protected int $digits;
+
+    public function __construct(int $digits)
+    {
+        $this->digits = abs($digits);
     }
 
     public function passes(): bool
