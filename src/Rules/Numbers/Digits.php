@@ -17,8 +17,8 @@ class Digits extends Rule
 
     public function passes(): bool
     {
-        $number = (string) $this->getValue();
+        $digits = (string) $this->getValue();
 
-        return strlen($number) === $this->digits;
+        return strlen($digits) === $this->digits;
     }
 }
