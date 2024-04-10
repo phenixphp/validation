@@ -6,10 +6,10 @@ namespace Phenix\Validation\Rules;
 
 class Between extends Size
 {
-    protected int $min;
-    protected int $max;
+    protected float|int $min;
+    protected float|int $max;
 
-    public function __construct(int $min, int $max)
+    public function __construct(float|int $min, float|int $max)
     {
         $this->min = abs($min);
         $this->max = abs($max);
