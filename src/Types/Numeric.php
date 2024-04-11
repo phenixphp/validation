@@ -6,10 +6,10 @@ namespace Phenix\Validation\Types;
 
 use Phenix\Validation\Rules\In;
 use Phenix\Validation\Rules\NotIn;
-use Phenix\Validation\Rules\TypeRule;
 use Phenix\Validation\Rules\Numbers\Digits;
-use Phenix\Validation\Rules\Numbers\IsNumeric;
 use Phenix\Validation\Rules\Numbers\DigitsBetween;
+use Phenix\Validation\Rules\Numbers\IsNumeric;
+use Phenix\Validation\Rules\TypeRule;
 
 class Numeric extends Scalar
 {
