@@ -6,8 +6,6 @@ namespace Phenix\Validation\Rules\Numbers;
 
 use Phenix\Validation\Rules\Between;
 
-use function is_string;
-
 class DigitsBetween extends Between
 {
     public function passes(): bool

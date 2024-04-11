@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+# Release Notes for 0.1.x
+
+## 0.1.0 (2024-04-10)
+
 ### Added
 - Numeric type. ([#6](https://github.com/phenixphp/validation/pull/6))
 - Floating type. ([#5](https://github.com/phenixphp/validation/pull/5))
