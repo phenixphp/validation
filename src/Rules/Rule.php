@@ -44,4 +44,9 @@ abstract class Rule implements RuleContract
     {
         return $this->data->get($this->field);
     }
+
+    protected function getValueType(): string
+    {
+        return gettype($this->data->get($this->field) ?? null);
+    }
 }
